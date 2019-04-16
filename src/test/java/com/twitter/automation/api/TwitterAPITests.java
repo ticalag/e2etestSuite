@@ -3,7 +3,6 @@ package com.twitter.automation.api;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.response.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,14 +15,12 @@ import static io.restassured.RestAssured.given;
 public class TwitterAPITests {
 
     private static final String ACCOUNT = "account";
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("common");
-
+   // private static ResourceBundle resourceBundle = ResourceBundle.getBundle("common");
+    private static final String BASE_URI = "https://api.twitter.com/1.1/";
     private static final String API_KEY = "rZiwgBfDxj9lF03awxCsaAyAd";
     private static final String API_SECRET_KEY = "OtYncFaRmqZI0FVCDZBnM1Se8kCPI2O30bF3NJhQAPDceU82BQ";
     private static final String ACCESS_TOKEN = "1103306156141883392-EhlksaKvWt1KRkcf2UBBiBEi2E9x6h";
     private static final String ACCESS_TOKEN_SECRET = "zme1ruserdSgeqLJ7T4DO0yBSdoMHfWbsxVLUfDgs5DFS";
-    private static String BASE_URI = resourceBundle.getString("twitter.api.resource.url");
-
     private static final String FAVORITES = "favorites";
     private static final String STATUSES = "statuses";
     private static final Logger LOGGER = LoggerFactory.getLogger(TwitterAPITests.class);

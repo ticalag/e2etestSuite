@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import static com.twitter.automation.api.TwitterAPITests.*;
+import static com.twitter.automation.api.TwitterAPITests.getNumberTweetsFromHomeTimeline;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 
@@ -14,8 +15,8 @@ public class APIRequestsSteps {
     private int numberOfTweetsFromApiAfterRequest;
     private String tweetStatus;
     private String selectedTweetID;
-    private int numberOfFavoriteTweetsBeforeRequest;
-    private int numberOfFavoriteTweetsAfterRequest;
+    private static int numberOfFavoriteTweetsBeforeRequest;
+    private static int numberOfFavoriteTweetsAfterRequest;
 
     public String getSelectedTweetID() {
         return selectedTweetID;
@@ -25,20 +26,20 @@ public class APIRequestsSteps {
         this.selectedTweetID = selectedTweetID;
     }
 
-    public int getNumberOfFavoriteTweetsBeforeRequest() {
+    public static int getNumberOfFavoriteTweetsBeforeRequest() {
         return numberOfFavoriteTweetsBeforeRequest;
     }
 
-    private void setNumberOfFavoriteTweetsBeforeRequest(int numberOfFavoriteTweetsBeforeRequest) {
-        this.numberOfFavoriteTweetsBeforeRequest = numberOfFavoriteTweetsBeforeRequest;
+    public static void setNumberOfFavoriteTweetsBeforeRequest(int numberOfFavoriteTweets) {
+        numberOfFavoriteTweetsBeforeRequest = numberOfFavoriteTweets;
     }
 
-    public int getNumberOfFavoriteTweetsAfterRequest() {
+    public static int getNumberOfFavoriteTweetsAfterRequest() {
         return numberOfFavoriteTweetsAfterRequest;
     }
 
-    private void setNumberOfFavoriteTweetsAfterRequest(int numberOfFavoriteTweetsAfterRequest) {
-        this.numberOfFavoriteTweetsAfterRequest = numberOfFavoriteTweetsAfterRequest;
+    public static void setNumberOfFavoriteTweetsAfterRequest(int numberOfFavoriteTweets) {
+        numberOfFavoriteTweetsAfterRequest = numberOfFavoriteTweets;
     }
 
     public int getNumberOfTweetsFromApiBeforeRequest() {
@@ -135,10 +136,10 @@ public class APIRequestsSteps {
     }
 
     @Then("^that id will no longer exist in the user list and the list will be shorter by (\\d+)$")
-    public void thatIdWillNoLongerExistInTheUserListAndTheListWillBeShorterBy(int tweetLength) {
+    public void thatIdWillNoLongerExistInTheUserListAndTheListWillBeShorterBy(int deletedTweets) {
         tweetIDShouldNotBeInTheUserList(getSelectedTweetID());
         setNumberOfTweetsFromApiAfterRequest(requestListOfTweetsIdsFromAPI().size());
-        assertEquals(getNumberOfTweetsFromApiBeforeRequest() - tweetLength, getNumberOfTweetsFromApiAfterRequest());
+        assertEquals(getNumberOfTweetsFromApiBeforeRequest() - deletedTweets, getNumberOfTweetsFromApiAfterRequest());
     }
 
     private void tweetIDShouldNotBeInTheUserList(String selectedTweetID) {
