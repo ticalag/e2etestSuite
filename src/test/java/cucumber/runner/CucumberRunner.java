@@ -11,12 +11,10 @@ import cucumber.api.testng.AbstractTestNGCucumberTests;
         },
         monochrome = true,
         features = "src/test/resources/cucumber.features",
-        tags = "@smoke-tests",
         glue = {
                 "com.twitter.automation.stepdefs"
         }
 )
-
 public class CucumberRunner extends AbstractTestNGCucumberTests {
 
 }

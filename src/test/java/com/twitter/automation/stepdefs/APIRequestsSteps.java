@@ -4,19 +4,19 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import static com.twitter.automation.api.TwitterAPITests.*;
-import static com.twitter.automation.api.TwitterAPITests.getNumberTweetsFromHomeTimeline;
+import static com.twitter.automation.api.requests.TwitterAPIRequests.*;
+
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 
 public class APIRequestsSteps {
 
-    private int numberOfTweetsFromApiBeforeRequest;
-    private int numberOfTweetsFromApiAfterRequest;
+    private int numberOfInitialTweetsFromApi;
+    private int numberOfActualTweetsFromApi;
     private String tweetStatus;
     private String selectedTweetID;
-    private static int numberOfFavoriteTweetsBeforeRequest;
-    private static int numberOfFavoriteTweetsAfterRequest;
+    private static int initialNumberOfFavoriteTweets;
 
     public String getSelectedTweetID() {
         return selectedTweetID;
@@ -26,36 +26,28 @@ public class APIRequestsSteps {
         this.selectedTweetID = selectedTweetID;
     }
 
-    public static int getNumberOfFavoriteTweetsBeforeRequest() {
-        return numberOfFavoriteTweetsBeforeRequest;
+    public static int getInitialNumberOfFavoriteTweets() {
+        return initialNumberOfFavoriteTweets;
     }
 
-    public static void setNumberOfFavoriteTweetsBeforeRequest(int numberOfFavoriteTweets) {
-        numberOfFavoriteTweetsBeforeRequest = numberOfFavoriteTweets;
+    public static void setInitialNumberOfFavoriteTweets(int numberOfFavoriteTweets) {
+        initialNumberOfFavoriteTweets = numberOfFavoriteTweets;
     }
 
-    public static int getNumberOfFavoriteTweetsAfterRequest() {
-        return numberOfFavoriteTweetsAfterRequest;
+    public int getNumberOfInitialTweetsFromApi() {
+        return numberOfInitialTweetsFromApi;
     }
 
-    public static void setNumberOfFavoriteTweetsAfterRequest(int numberOfFavoriteTweets) {
-        numberOfFavoriteTweetsAfterRequest = numberOfFavoriteTweets;
+    private void setNumberOfInitialTweetsFromApi(int numberOfInitialTweetsFromApi) {
+        this.numberOfInitialTweetsFromApi = numberOfInitialTweetsFromApi;
     }
 
-    public int getNumberOfTweetsFromApiBeforeRequest() {
-        return numberOfTweetsFromApiBeforeRequest;
+    public int getNumberOfActualTweetsFromApi() {
+        return numberOfActualTweetsFromApi;
     }
 
-    private void setNumberOfTweetsFromApiBeforeRequest(int numberOfTweetsFromApiBeforeRequest) {
-        this.numberOfTweetsFromApiBeforeRequest = numberOfTweetsFromApiBeforeRequest;
-    }
-
-    public int getNumberOfTweetsFromApiAfterRequest() {
-        return numberOfTweetsFromApiAfterRequest;
-    }
-
-    private void setNumberOfTweetsFromApiAfterRequest(int numberOfTweetsFromApiAfterRequest) {
-        this.numberOfTweetsFromApiAfterRequest = numberOfTweetsFromApiAfterRequest;
+    private void setNumberOfActualTweetsFromApi(int numberOfActualTweetsFromApi) {
+        this.numberOfActualTweetsFromApi = numberOfActualTweetsFromApi;
     }
 
     public String getTweetStatus() {
@@ -66,9 +58,10 @@ public class APIRequestsSteps {
         this.tweetStatus = tweetStatus;
     }
 
-    @Given("that we get the number of tweets from API")
-    public void weGetTheNumberOfTweetsFromAPI() {
-        setNumberOfTweetsFromApiBeforeRequest(getNumberTweetsFromHomeTimeline());
+    @Given("that we request the number of tweets from API")
+    public void weRequestTheNumberOfTweetsFromAPI() {
+        setNumberOfInitialTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
+
     }
 
     @When("we post (.*) Tweet using API request")
@@ -78,23 +71,24 @@ public class APIRequestsSteps {
         }
     }
 
-    @Then("the tweet is posted and there is (.*) tweet added to the list")
-    public void theTweetIsPostedAndThereIsTweetAddedToTheList(int expectedNumberOfTweets) {
-        setNumberOfTweetsFromApiAfterRequest(getNumberTweetsFromHomeTimeline());
-        assertEquals(getNumberOfTweetsFromApiBeforeRequest() + expectedNumberOfTweets, getNumberOfTweetsFromApiAfterRequest());
+    @Then("requesting the list of tweets from API, we should have (\\+|-)(\\d) tweets is in the list")
+    public void theTweetIsPostedAndThereIsTweetAddedToTheList(String symbol, int numberOfTweets) {
+        setNumberOfActualTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
+        if ("-".equals(symbol)) {
+            assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() - numberOfTweets);
+        } else {
+            assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() + numberOfTweets);
+        }
     }
 
     @Given("^that we add as favorite tweet the (1|2|3)(?:st|nd|rd) posted tweet$")
     public void thatWeAddAsFavoriteTweetThePostedTweet(int tweetPosition) {
-        setNumberOfFavoriteTweetsBeforeRequest(getNumberOfFavoriteTweetsIdsFromAPI());
-        addFavoriteTweetByAPI(requestListOfTweetsIdsFromAPI().get(tweetPosition - 1).toString());
-        setNumberOfFavoriteTweetsAfterRequest(getNumberOfFavoriteTweetsIdsFromAPI());
-
+        addFavoriteTweetThroughApiRequest(requestListOfTweetsIdsFromAPI().get(tweetPosition - 1).toString());
     }
 
-    @Then("^we should have a favorite tweet added to the list$")
-    public void weShouldHaveAFavoriteTweetAddedToTheList() {
-        assertEquals(getNumberOfFavoriteTweetsBeforeRequest() + 1, getNumberOfFavoriteTweetsAfterRequest());
+    @Then("^we should have ([^\"]*) favorite tweet added to the list$")
+    public void weShouldHaveAFavoriteTweetAddedToTheList(int numberOfTweets) {
+        assertEquals(requestListOfFavoriteTweetsIdsFromAPI().size(), getInitialNumberOfFavoriteTweets() + numberOfTweets);
     }
 
     @When("^that we get the tweet status from the (1|2|3)(?:st|nd|rd) position$")
@@ -104,29 +98,29 @@ public class APIRequestsSteps {
 
     @Then("^the expected tweet status is retrieved from API$")
     public void theExpectedTweetStatusIsRetrievedFromAPI() {
-        assertEquals(getExpectedTweetMessage(), getTweetStatus());
+        assertEquals(getUniqueTweetMessage(), getTweetStatus());
     }
 
     @Given("^that we update the users language and time zone to \"([^\"]*)\" and \"([^\"]*)\" Time Zone$")
     public void thatWeUpdateTheUsersLanguageAndTimeZoneToAndTimeZone(String languageCode, String timeZone) {
-        updateUserProfileLanguage(languageCode, timeZone);
+        updateUserProfileLanguageUsingApiRequest(languageCode, timeZone);
     }
 
     @When("^we retrieve the account settings$")
     public void weRetrieveTheAccountSettings() {
-        getAccountSettingsFromAPI();
+        getUserTimeZoneAndLanguageFromAPI();
     }
 
     @Then("^the language should be \"([^\"]*)\" and the time-zone \"([^\"]*)\"$")
     public void theLanguageShouldBeAndTheTimeZone(String languageCode, String timeZone) {
-        assertEquals(getUserLanguage(), languageCode);
-        assertEquals(getUserTimeZone(), timeZone);
+        assertEquals(getUserLanguageFromAPI(), languageCode);
+        assertEquals(getUserTimeZoneFromAPI(), timeZone);
     }
 
     @Given("^that we want to delete the (1|2|3)(?:st|nd|rd) tweet from the list$")
     public void thatWeWantToDeleteTheStTweetFromTheList(int tweetPosition) {
         setSelectedTweetID(requestListOfTweetsIdsFromAPI().get(tweetPosition - 1).toString());
-        setNumberOfTweetsFromApiBeforeRequest(requestListOfTweetsIdsFromAPI().size());
+        setNumberOfInitialTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
     }
 
 
@@ -136,15 +130,20 @@ public class APIRequestsSteps {
     }
 
     @Then("^that id will no longer exist in the user list and the list will be shorter by (\\d+)$")
-    public void thatIdWillNoLongerExistInTheUserListAndTheListWillBeShorterBy(int deletedTweets) {
+    public void thatIdWillNoLongerExistInTheUserListAndTheListWillBeShorterBy(int numberOfDeletedTweets) {
         tweetIDShouldNotBeInTheUserList(getSelectedTweetID());
-        setNumberOfTweetsFromApiAfterRequest(requestListOfTweetsIdsFromAPI().size());
-        assertEquals(getNumberOfTweetsFromApiBeforeRequest() - deletedTweets, getNumberOfTweetsFromApiAfterRequest());
+        setNumberOfActualTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
+        assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() - numberOfDeletedTweets);
     }
 
     private void tweetIDShouldNotBeInTheUserList(String selectedTweetID) {
         for (Object tweetID : requestListOfTweetsIdsFromAPI()) {
             assertNotEquals(tweetID.toString(), selectedTweetID);
         }
+    }
+
+    @Given("^that we request the number of favorite tweets from API$")
+    public void thatWeRequestTheNumberOfFavoriteTweetsFromAPI() {
+        setInitialNumberOfFavoriteTweets(requestListOfFavoriteTweetsIdsFromAPI().size());
     }
 }

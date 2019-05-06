@@ -1,19 +1,22 @@
 @smoke-tests
-Feature: Test Tweeter API Requests
-  As a member of the tweeter API
-  We should ensure that our API's are working and returning correct response
+
+Feature: Test Twitter API Requests
+  As members of the twitter API team
+  We should ensure that our APIs are working and returning correct response
   So that organizations can use our API with confidence
 
   @postTweetAPI
-  Scenario: Successfully post a Tweet using POST statuses/update API (maybe use scenario outline)
-    Given that we get the number of tweets from API
+  Scenario: Successfully post a Tweet using POST request
+    Given that we request the number of tweets from API
     When we post 1 Tweet using API request
-    Then the tweet is posted and there is 1 tweet added to the list
+    Then requesting the list of tweets from API, we should have +1 tweets is in the list
+
 
   @addFavoriteTweet
   Scenario: Favorite Tweet is added to the favorite tweet list by API Response
-    Given that we add as favorite tweet the 1st posted tweet
-    Then we should have a favorite tweet added to the list
+    Given that we request the number of favorite tweets from API
+    When that we add as favorite tweet the 1st posted tweet
+    Then we should have 1 favorite tweet added to the list
 
   @profileUpdate
   Scenario Outline: Profile update using API request
@@ -26,9 +29,10 @@ Feature: Test Tweeter API Requests
       |  fr      |  Paris   |
       |  en      |  London  |
 
-  @deleteTweet
+  @deleteTweetAPI
   Scenario: Successfully delete selected tweet using delete request
-    Given that we want to delete the 1st tweet from the list
+    Given that we request the number of tweets from API
+    And that we want to delete the 2nd tweet from the list
     When we send a delete request with the selected tweet id
     Then that id will no longer exist in the user list and the list will be shorter by 1
 
