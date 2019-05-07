@@ -3,11 +3,8 @@ package com.twitter.automation.page.object.model;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static com.twitter.automation.stepdefs.HomePageSteps.setActualUnselectedFavoriteIcons;
 import static com.twitter.automation.stepdefs.HomePageSteps.setInitialUnselectedFavoriteIcons;
@@ -59,11 +56,8 @@ public class TwitterHomePage {
     private final String USERNAME = loadPropertiesFile().getProperty("username");
     private final String PASSWORD = loadPropertiesFile().getProperty("password");
 
-
     private final Logger LOGGER = LoggerFactory.getLogger(TwitterHomePage.class);
     private WebDriver driver;
-
-    private List<WebElement> LIST_OF_TWEET_TEXT;
 
     public TwitterHomePage(WebDriver driver) {
         this.driver = driver;
@@ -131,8 +125,7 @@ public class TwitterHomePage {
     }
 
     public String getTweetTextFromPosition(int positionNumber) {
-        LIST_OF_TWEET_TEXT = driver.findElements(By.cssSelector(".stream-items .tweet-text"));
-        return LIST_OF_TWEET_TEXT.get(positionNumber - 1).getText();
+        return driver.findElements(By.cssSelector(".stream-items .tweet-text")).get(positionNumber - 1).getText();
     }
 
 

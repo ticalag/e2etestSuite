@@ -5,8 +5,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import static com.twitter.automation.api.requests.TwitterAPIRequests.*;
-
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 
@@ -30,7 +28,7 @@ public class APIRequestsSteps {
         return initialNumberOfFavoriteTweets;
     }
 
-    public static void setInitialNumberOfFavoriteTweets(int numberOfFavoriteTweets) {
+    private static void setInitialNumberOfFavoriteTweets(int numberOfFavoriteTweets) {
         initialNumberOfFavoriteTweets = numberOfFavoriteTweets;
     }
 
@@ -71,6 +69,7 @@ public class APIRequestsSteps {
         }
     }
 
+    //TODO break the below method into two smaller methods
     @Then("requesting the list of tweets from API, we should have (\\+|-)(\\d) tweets is in the list")
     public void theTweetIsPostedAndThereIsTweetAddedToTheList(String symbol, int numberOfTweets) {
         setNumberOfActualTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
@@ -81,6 +80,7 @@ public class APIRequestsSteps {
         }
     }
 
+    //TODO refactor logic because of following warning: Reports single char alternation (a|b|c|d) in a RegExp.
     @Given("^that we add as favorite tweet the (1|2|3)(?:st|nd|rd) posted tweet$")
     public void thatWeAddAsFavoriteTweetThePostedTweet(int tweetPosition) {
         addFavoriteTweetThroughApiRequest(requestListOfTweetsIdsFromAPI().get(tweetPosition - 1).toString());
@@ -101,6 +101,7 @@ public class APIRequestsSteps {
         assertEquals(getUniqueTweetMessage(), getTweetStatus());
     }
 
+    //TODO break this into two separate methods, one for language and one for timeZone
     @Given("^that we update the users language and time zone to \"([^\"]*)\" and \"([^\"]*)\" Time Zone$")
     public void thatWeUpdateTheUsersLanguageAndTimeZoneToAndTimeZone(String languageCode, String timeZone) {
         updateUserProfileLanguageUsingApiRequest(languageCode, timeZone);
@@ -129,6 +130,7 @@ public class APIRequestsSteps {
         deleteSelectedTweetRequest(getSelectedTweetID());
     }
 
+    //TODO break this into smaller piece
     @Then("^that id will no longer exist in the user list and the list will be shorter by (\\d+)$")
     public void thatIdWillNoLongerExistInTheUserListAndTheListWillBeShorterBy(int numberOfDeletedTweets) {
         tweetIDShouldNotBeInTheUserList(getSelectedTweetID());
@@ -136,6 +138,7 @@ public class APIRequestsSteps {
         assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() - numberOfDeletedTweets);
     }
 
+    //TODO after the above method is refactored, remove this
     private void tweetIDShouldNotBeInTheUserList(String selectedTweetID) {
         for (Object tweetID : requestListOfTweetsIdsFromAPI()) {
             assertNotEquals(tweetID.toString(), selectedTweetID);

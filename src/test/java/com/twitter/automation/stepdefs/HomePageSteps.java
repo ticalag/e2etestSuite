@@ -19,14 +19,14 @@ import static org.testng.Assert.assertEquals;
 
 public class HomePageSteps {
 
-
+    //TODO extract setup into a base class
     private static WebDriver driver;
+    //TODO implement spring @Lazy annotation
+    private TwitterHomePage homePage;
 
-    public static WebDriver getDriver() {
+    private static WebDriver getDriver() {
         return driver;
     }
-
-    private TwitterHomePage homePage;
     private static String uniqueTweetMessage;
     private static String tweetTextThatWillBeDeleted;
     private static int initialUnselectedFavoriteIcons;
@@ -34,7 +34,6 @@ public class HomePageSteps {
 
     @Before
     public void setUp() {
-        System.out.println();
         WebDriverManager.chromedriver().setup();
         //TODO add logic to change browser based on user preference
         driver = new ChromeDriver();
@@ -49,36 +48,35 @@ public class HomePageSteps {
         }
     }
 
-
-    public static int getInitialUnselectedFavoriteIcons() {
+    private static int getInitialUnselectedFavoriteIcons() {
         return initialUnselectedFavoriteIcons;
     }
 
-    public static void setInitialUnselectedFavoriteIcons(int initialUnselectedFavoriteIcons) {
-        HomePageSteps.initialUnselectedFavoriteIcons = initialUnselectedFavoriteIcons;
+    public static void setInitialUnselectedFavoriteIcons(int initialValue) {
+        initialUnselectedFavoriteIcons = initialValue;
     }
 
-    public static int getActualUnselectedFavoriteIcons() {
+    private static int getActualUnselectedFavoriteIcons() {
         return actualUnselectedFavoriteIcons;
     }
 
-    public static void setActualUnselectedFavoriteIcons(int actualUnselectedFavoriteIcons) {
-        HomePageSteps.actualUnselectedFavoriteIcons = actualUnselectedFavoriteIcons;
+    public static void setActualUnselectedFavoriteIcons(int actualValue) {
+        actualUnselectedFavoriteIcons = actualValue;
     }
 
-    public static String getTweetTextThatWillBeDeleted() {
+    private static String getTweetTextThatWillBeDeleted() {
         return tweetTextThatWillBeDeleted;
     }
 
-    public static void setTweetTextThatWillBeDeleted(String tweetTextThatWillBeDeleted) {
+    private static void setTweetTextThatWillBeDeleted(String tweetTextThatWillBeDeleted) {
         HomePageSteps.tweetTextThatWillBeDeleted = tweetTextThatWillBeDeleted;
     }
 
-    public static String getUniqueTweetMessage() {
+    private static String getUniqueTweetMessage() {
         return uniqueTweetMessage;
     }
 
-    public static void setUniqueTweetMessage(String uniqueTweetMessage) {
+    private static void setUniqueTweetMessage(String uniqueTweetMessage) {
         HomePageSteps.uniqueTweetMessage = uniqueTweetMessage;
     }
 
@@ -108,7 +106,6 @@ public class HomePageSteps {
             homePage.login();
         } else {
             homePage.logout();
-
         }
     }
 
@@ -127,6 +124,7 @@ public class HomePageSteps {
 
     }
 
+    //TODO break this into two steps
     @And("^we wait until the new tweet bar is displayed and we click on it to update the tweet message list$")
     public void weWaitUntilTheNewTweetBarIsDisplayedAndWeClickOnItToUpdateTheTweetMessageList() {
         homePage.clickOnNewTweetBar();
@@ -185,6 +183,7 @@ public class HomePageSteps {
         homePage.clickOnEmojiMenu();
     }
 
+    // TODO break this into two steps
     @Then("^the emoji content is displayed and after clicking on it it's no longer displayed$")
     public void theEmojiContentIsDisplayedAndAfterClickingOnItItSNoLongerDisplayed() {
         assertTrue(homePage.isEmojiContentDisplayed());
@@ -192,8 +191,8 @@ public class HomePageSteps {
         assertFalse(homePage.isEmojiContentDisplayed());
     }
 
-    @And("^the user click on the right nav tweet button and opens the compose tweet modal$")
-    public void theUserClickOnTheRightNavTweetButtonAndOpensTheComposeTweetModal() {
+    @And("^open the top nav tweet modal$")
+    public void openComposeTweetModalFromNavBar() {
         homePage.clickOnTopNavTweetButton();
     }
 

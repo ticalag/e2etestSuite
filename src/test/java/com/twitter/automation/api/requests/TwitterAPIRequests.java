@@ -29,11 +29,11 @@ public class TwitterAPIRequests {
         return TwitterAPIRequests.uniqueTweetMessage;
     }
 
-    public static void setUniqueTweetMessage(String uniqueTweetMessage) {
-        TwitterAPIRequests.uniqueTweetMessage = uniqueTweetMessage;
+    private static void setUniqueTweetMessage(String tweetMessage) {
+        uniqueTweetMessage = tweetMessage;
     }
 
-    public static String createUniqueTweetMessage() {
+    private static String createUniqueTweetMessage() {
         return "Tweet " + UUID.randomUUID().toString() + " added through API POST request";
     }
 
@@ -41,16 +41,16 @@ public class TwitterAPIRequests {
         return userTimeZoneFromAPI;
     }
 
-    private static void setUserTimeZoneFromAPI(String userTimeZoneFromAPI) {
-        TwitterAPIRequests.userTimeZoneFromAPI = userTimeZoneFromAPI;
+    private static void setUserTimeZoneFromAPI(String userTimeZone) {
+        userTimeZoneFromAPI = userTimeZone;
     }
 
     public static String getUserLanguageFromAPI() {
         return userLanguageFromAPI;
     }
 
-    private static void setUserLanguageFromAPI(String userLanguageFromAPI) {
-        TwitterAPIRequests.userLanguageFromAPI = userLanguageFromAPI;
+    private static void setUserLanguageFromAPI(String userLanguage) {
+        userLanguageFromAPI = userLanguage;
     }
 
     public static List<Object> requestListOfTweetsIdsFromAPI() {

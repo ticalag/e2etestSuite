@@ -34,7 +34,7 @@ Feature: Twitter interface
     When the user logs "in"
     And the user navigates to the user timeline
     And that we request the number of tweets from API
-    And the user click on the right nav tweet button and opens the compose tweet modal
+    And open the top nav tweet modal
     And enters the following text "Posting a tweet using selenium"
     And when the user clicks on the emoji menu
     Then the emoji content is displayed and after clicking on it it's no longer displayed
