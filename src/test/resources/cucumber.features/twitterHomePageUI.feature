@@ -39,7 +39,8 @@ Feature: Twitter interface
     And when the user clicks on the emoji menu
     Then the emoji content is displayed and after clicking on it it's no longer displayed
     And user clicks on the tweet button and waits until the tweet is posted
-    And requesting the list of tweets from API, we should have +1 tweets is in the list
+    And requesting the list of tweets from API
+    Then should have +1 tweets is in the list
     And we wait until the new tweet bar is displayed and we click on it to update the tweet message list
     Then the posted tweet should be displayed and should contain the above message
 
@@ -61,7 +62,8 @@ Feature: Twitter interface
     And that we request the number of tweets from API
     And then the user decides to delete 2nd tweet
     Then the tweet from the 2nd position should no longer be displayed
-    And requesting the list of tweets from API, we should have -1 tweets is in the list
+    And requesting the list of tweets from API
+    Then should have -1 tweets is in the list
 
 
   @favoriteTweet

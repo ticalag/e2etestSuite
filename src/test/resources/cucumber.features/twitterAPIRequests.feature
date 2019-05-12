@@ -9,7 +9,8 @@ Feature: Test Twitter API Requests
   Scenario: Successfully post a Tweet using POST request
     Given that we request the number of tweets from API
     When we post 1 Tweet using API request
-    Then requesting the list of tweets from API, we should have +1 tweets is in the list
+    And  requesting the list of tweets from API
+    Then should have +1 tweets is in the list
 
 
   @addFavoriteTweet
@@ -24,10 +25,10 @@ Feature: Test Twitter API Requests
     When we retrieve the account settings
     Then the language should be "<language>" and the time-zone "<timeZone>"
     Examples:
-      |language  | timeZone |
-      |  es      |  Madrid  |
-      |  fr      |  Paris   |
-      |  en      |  London  |
+      | language | timeZone |
+      | es       | Madrid   |
+      | fr       | Paris    |
+      | en       | London   |
 
   @deleteTweetAPI
   Scenario: Successfully delete selected tweet using delete request

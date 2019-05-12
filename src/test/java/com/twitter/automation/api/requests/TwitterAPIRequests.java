@@ -101,6 +101,7 @@ public class TwitterAPIRequests {
         given().auth().oauth(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
                 .when().post("/settings.json?lang=" + languageCode.toLowerCase() + "&time_zone=" + timeZone)
                 .then().log().ifValidationFails().statusCode(200).extract().response();
+        LOGGER.info("updating user profile language code [{}] and time zone [{}] ", languageCode, timeZone);
     }
 
     public static void getUserTimeZoneAndLanguageFromAPI() {
@@ -117,6 +118,7 @@ public class TwitterAPIRequests {
 
     public static void deleteSelectedTweetRequest(String tweetID) {
         RestAssured.baseURI = BASE_URI + STATUSES;
+        LOGGER.info("deleting using API for tweet id: [{}]", tweetID);
         given().auth().oauth(API_KEY, API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
                 .when().post("/destroy/" + tweetID + ".json")
                 .then().log().ifValidationFails().statusCode(200).extract().response();

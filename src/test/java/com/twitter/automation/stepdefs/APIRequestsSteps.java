@@ -1,12 +1,14 @@
 package com.twitter.automation.stepdefs;
 
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import static com.twitter.automation.api.requests.TwitterAPIRequests.*;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 
 public class APIRequestsSteps {
 
@@ -69,10 +71,8 @@ public class APIRequestsSteps {
         }
     }
 
-    //TODO break the below method into two smaller methods
-    @Then("requesting the list of tweets from API, we should have (\\+|-)(\\d) tweets is in the list")
-    public void theTweetIsPostedAndThereIsTweetAddedToTheList(String symbol, int numberOfTweets) {
-        setNumberOfActualTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
+    @Then("should have (\\+|-)(\\d) tweets is in the list")
+    public void shouldHaveExpectedNumberOfTweets(String symbol, int numberOfTweets) {
         if ("-".equals(symbol)) {
             assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() - numberOfTweets);
         } else {
@@ -148,5 +148,10 @@ public class APIRequestsSteps {
     @Given("^that we request the number of favorite tweets from API$")
     public void thatWeRequestTheNumberOfFavoriteTweetsFromAPI() {
         setInitialNumberOfFavoriteTweets(requestListOfFavoriteTweetsIdsFromAPI().size());
+    }
+
+    @And("^requesting the list of tweets from API$")
+    public void requestingTheListOfTweetsFromAPI() {
+        setNumberOfActualTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
     }
 }

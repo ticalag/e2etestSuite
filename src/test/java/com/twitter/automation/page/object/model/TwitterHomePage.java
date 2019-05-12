@@ -65,7 +65,6 @@ public class TwitterHomePage {
     }
 
     public void navigateToTwitterHomePage() {
-        LOGGER.info("navigated to {}", BASE_URL);
         driver.get(BASE_URL);
     }
 
@@ -154,6 +153,7 @@ public class TwitterHomePage {
         driver.findElements(TWEET_REPLY_ICON).get(tweetPosition - 1).click();
         waitForElement(driver, TWEET_REPLY_MODAL, 2);
         enterTextIntoElement(TWEET_REPLY_BOX, tweetReply);
+        LOGGER.info("replying with message: [{}]", tweetReply);
         waitForTextToBePresentInElement(driver, 2, TWEET_REPLY_BOX, tweetReply);
         driver.findElement(TWEET_REPLY_BUTTON).click();
         waitForElement(driver, TWEET_ALERT_MESSAGE, 2);

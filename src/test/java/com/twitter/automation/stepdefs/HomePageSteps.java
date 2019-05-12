@@ -15,7 +15,6 @@ import java.util.UUID;
 
 import static com.twitter.automation.utils.CommonUtils.waitForURL;
 import static org.junit.Assert.*;
-import static org.testng.Assert.assertEquals;
 
 public class HomePageSteps {
 
