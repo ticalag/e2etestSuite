@@ -7,7 +7,7 @@ As mentioned above, this project is still a work in progress, there is plenty of
 Bare in mind that if you run the API tests too many times (over 15 times in 1 minute), it will throw a 403 status code, because there is a limit for the number of times an account can make requests.
 
 
-To run this project you need to create a testNG configuration and add the following WM options: 
+To run this project you need to create a JUnit configuration and add the following WM options: 
 
 -Dtest=CucumberRunner -Dcucumber.options="--tags @loginPage" where @loginPage represents a cucumber tag/testcase 
 
