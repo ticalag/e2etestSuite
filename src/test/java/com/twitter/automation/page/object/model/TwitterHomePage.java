@@ -119,7 +119,7 @@ public class TwitterHomePage {
     public void logout() {
         driver.findElement(USER_SETTINGS_BUTTON).click();
         driver.findElement(USER_SIGN_OUT_BUTTON).click();
-        waitForUrlContains(driver, "logout", 2);
+        waitForUrlToContain(driver, "logout", 2);
 
     }
 

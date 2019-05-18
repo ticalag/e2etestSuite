@@ -37,27 +37,18 @@ public class CommonUtils {
         }
     }
 
-    public static Boolean waitForUrlContains(WebDriver driver, String containsText, int specifiedTimeout) {
+    public static Boolean waitForUrlToContain(WebDriver driver, String containsText, int specifiedTimeout) {
         WebDriverWait wait = new WebDriverWait(driver, specifiedTimeout);
         return wait.until(ExpectedConditions.urlContains(containsText));
     }
 
     public static WebElement waitForElement(WebDriver driver, By locator, long timeOutInSeconds) {
-        return waitForVisibilityOfElement(driver, timeOutInSeconds, locator);
-    }
-
-
-    public static WebElement waitForVisibilityOfElement(WebDriver driver, long seconds, By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, seconds);
+        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
-    public static void waitForElementToDisappear(WebDriver driver, By locator, long timeOutInSeconds) {
-        waitForInvisibilityOfElement(driver, timeOutInSeconds, locator);
-    }
-
-    public static Boolean waitForInvisibilityOfElement(WebDriver driver, long seconds, By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, seconds);
+    public static Boolean waitForElementToDisappear(WebDriver driver, By locator, long timeOutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
@@ -67,11 +58,8 @@ public class CommonUtils {
     }
 
     public static Boolean waitForURL(WebDriver driver, String expectedURL, long waitTimeInSeconds) {
-        return waitForURLToContain(driver, waitTimeInSeconds, expectedURL.toLowerCase());
+        WebDriverWait wait = new WebDriverWait(driver, waitTimeInSeconds);
+        return wait.until(ExpectedConditions.urlContains(expectedURL.toLowerCase()));
     }
 
-    public static Boolean waitForURLToContain(WebDriver driver, long seconds, String expectedURL) {
-        WebDriverWait wait = new WebDriverWait(driver, seconds);
-        return wait.until(ExpectedConditions.urlContains(expectedURL));
-    }
 }
