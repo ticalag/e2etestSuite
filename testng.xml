@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Twitter Automation" verbose="0" thread-count="1">
+    <parameter name="Browser" value="chrome"/>
+    <test name="Twitter Tests">
+        <classes>
+            <class name="cucumber.runner.CucumberRunner"/>
+        </classes>
+    </test>
+</suite>
