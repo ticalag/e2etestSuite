@@ -1,13 +1,13 @@
-package com.twitter.automation.stepdefs;
+package com.twitter.automation.step.definitions;
 
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import static com.twitter.automation.api.requests.TwitterAPIRequests.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 
 
 public class APIRequestsSteps {
@@ -61,26 +61,15 @@ public class APIRequestsSteps {
     @Given("that we request the number of tweets from API")
     public void weRequestTheNumberOfTweetsFromAPI() {
         setNumberOfInitialTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
-
     }
 
-    @When("we post (.*) Tweet using API request")
+    @When("we post {int} Tweet using API request")
     public void wePostTweetUsingAPIRequest(int numberOfTweets) {
         for (int i = 0; i < numberOfTweets; i++) {
             postTweetThroughAPI();
         }
     }
 
-    @Then("should have (\\+|-)(\\d) tweets is in the list")
-    public void shouldHaveExpectedNumberOfTweets(String symbol, int numberOfTweets) {
-        if ("-".equals(symbol)) {
-            assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() - numberOfTweets);
-        } else {
-            assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() + numberOfTweets);
-        }
-    }
-
-    //TODO refactor logic because of following warning: Reports single char alternation (a|b|c|d) in a RegExp.
     @Given("^that we add as favorite tweet the (1|2|3)(?:st|nd|rd) posted tweet$")
     public void thatWeAddAsFavoriteTweetThePostedTweet(int tweetPosition) {
         addFavoriteTweetThroughApiRequest(requestListOfTweetsIdsFromAPI().get(tweetPosition - 1).toString());
@@ -101,7 +90,6 @@ public class APIRequestsSteps {
         assertEquals(getUniqueTweetMessage(), getTweetStatus());
     }
 
-    //TODO break this into two separate methods, one for language and one for timeZone
     @Given("^that we update the users language and time zone to \"([^\"]*)\" and \"([^\"]*)\" Time Zone$")
     public void thatWeUpdateTheUsersLanguageAndTimeZoneToAndTimeZone(String languageCode, String timeZone) {
         updateUserProfileLanguageUsingApiRequest(languageCode, timeZone);
@@ -130,7 +118,6 @@ public class APIRequestsSteps {
         deleteSelectedTweetRequest(getSelectedTweetID());
     }
 
-    //TODO break this into smaller piece
     @Then("^that id will no longer exist in the user list and the list will be shorter by (\\d+)$")
     public void thatIdWillNoLongerExistInTheUserListAndTheListWillBeShorterBy(int numberOfDeletedTweets) {
         tweetIDShouldNotBeInTheUserList(getSelectedTweetID());
@@ -138,7 +125,6 @@ public class APIRequestsSteps {
         assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() - numberOfDeletedTweets);
     }
 
-    //TODO after the above method is refactored, remove this
     private void tweetIDShouldNotBeInTheUserList(String selectedTweetID) {
         for (Object tweetID : requestListOfTweetsIdsFromAPI()) {
             assertNotEquals(tweetID.toString(), selectedTweetID);
@@ -153,5 +139,14 @@ public class APIRequestsSteps {
     @And("^requesting the list of tweets from API$")
     public void requestingTheListOfTweetsFromAPI() {
         setNumberOfActualTweetsFromApi(requestListOfTweetsIdsFromAPI().size());
+    }
+
+    @Then("should have {word}{int} tweets is in the list")
+    public void shouldHaveExpectedNumberOfTweets(String symbol, int numberOfTweets) {
+        if ("-".equals(symbol)) {
+            assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() - numberOfTweets);
+        } else {
+            assertEquals(getNumberOfActualTweetsFromApi(), getNumberOfInitialTweetsFromApi() + numberOfTweets);
+        }
     }
 }

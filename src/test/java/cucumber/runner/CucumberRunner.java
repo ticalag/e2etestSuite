@@ -1,22 +1,38 @@
 package cucumber.runner;
 
 
-import cucumber.api.CucumberOptions;
-import cucumber.api.junit.Cucumber;
-import org.junit.runner.RunWith;
+import io.cucumber.testng.AbstractTestNGCucumberTests;
+import io.cucumber.testng.CucumberOptions;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
 
-@RunWith(Cucumber.class)
+import javax.annotation.Nonnull;
+
+
 @CucumberOptions(
-        plugin = {"pretty",
-                "html:target/cucumber/cucumber-html-report",
-                "json:target/cucumber/cucumber-json-report.json"
-        },
+        plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:", "json:target/cucumber-reports/extent-report.json"},
         monochrome = true,
-        features = "src/test/resources/cucumber.features",
+        strict = true,
+        features = "src/test/resources/features",
+        tags = "@regression",
         glue = {
-                "com.twitter.automation.stepdefs"
+                "com.twitter.automation.step.definitions"
         }
 )
-public class CucumberRunner {
+
+public class CucumberRunner extends AbstractTestNGCucumberTests {
+
+    @DataProvider()
+    @Override
+    public Object[][] scenarios() {
+        return super.scenarios();
+    }
+
+    @BeforeClass(alwaysRun = true)
+    @Parameters({"Browser"})
+    public void setBrowser(@Nonnull String browserName) {
+        System.setProperty("Browser", browserName);
+    }
 
 }

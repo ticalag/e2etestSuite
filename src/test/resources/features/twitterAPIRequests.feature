@@ -1,4 +1,4 @@
-@smoke-tests
+@smokeTestsAPI @regression
 
 Feature: Test Twitter API Requests
   As members of the twitter API team
@@ -20,7 +20,7 @@ Feature: Test Twitter API Requests
     Then we should have 1 favorite tweet added to the list
 
   @profileUpdate
-  Scenario Outline: Profile update using API request
+  Scenario Outline: Profile update to <language> using API request
     Given that we update the users language and time zone to "<language>" and "<timeZone>" Time Zone
     When we retrieve the account settings
     Then the language should be "<language>" and the time-zone "<timeZone>"

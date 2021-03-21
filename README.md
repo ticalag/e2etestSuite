@@ -1,16 +1,22 @@
 # Twitter Front-end & Back-end automation tests framework
 
-### Please take into consideration that this project is a personal project which is still in progress and will have multiple features added with time. I'm working on this framework in my spare time. The purpose of this project is to show my knowledge in automation area, to explore and play with new features, ideas, and also improve my skills.
+Bear in mind that if you run the API tests too many times (over 15 times in 1 minute), it will throw a 403 status code,
+because there is a limit for the number of times an account can make requests.
 
-As mentioned above, this project is still a work in progress, there is plenty of room to improve thus I've added TODO's where I thought that I need to review when I have some free time.
+To run this project you need to create a TestNG configuration and add the following WM options:
 
-Bare in mind that if you run the API tests too many times (over 15 times in 1 minute), it will throw a 403 status code, because there is a limit for the number of times an account can make requests.
+**-DBrowser="chrome" -Dcucumber.options="--tags @loginPage"**
+Here **@loginPage** represents a cucumber tag/testcase, if you add the tags option in the configuration, it will override
+the tag from the CucumberRunner.
+
+You can also run the tests using the **mvn clean test** command 
+
+If you want to run a specific scenario using command line here is an example how to do so:
+
+**mvn clean test -Dcucumber.options="--tags @loginPage"** this will run the loginPage scenario only
 
 
-To run this project you need to create a JUnit configuration and add the following WM options: 
+The Ui tests can be run in the following browsers: **chrome, firefox, edge and opera.**
 
--Dtest=CucumberRunner -Dcucumber.options="--tags @loginPage" where @loginPage represents a cucumber tag/testcase 
-
-For example if you want to run all the tests, simply add the @smoke-tests
-this will run both the front-end and back-end tests.
+If you want to run all the tests, simply add the **@regression** this will run both the front-end and back-end tests.
 

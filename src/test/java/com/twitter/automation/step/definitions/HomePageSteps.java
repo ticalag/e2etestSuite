@@ -1,51 +1,27 @@
-package com.twitter.automation.stepdefs;
+package com.twitter.automation.step.definitions;
 
 import com.twitter.automation.page.object.model.TwitterHomePage;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import java.util.UUID;
 
 import static com.twitter.automation.utils.CommonUtils.waitForURL;
-import static org.junit.Assert.*;
+import static org.testng.Assert.*;
+
 
 public class HomePageSteps {
 
-    //TODO extract setup into a base class
-    private static WebDriver driver;
-    //TODO implement spring @Lazy annotation
-    private TwitterHomePage homePage;
+    private final TwitterHomePage homePage = new TwitterHomePage();
 
-    private static WebDriver getDriver() {
-        return driver;
-    }
+
     private static String uniqueTweetMessage;
-    private static String tweetTextThatWillBeDeleted;
+    private static String uniqueTweetReplyMessage;
     private static int initialUnselectedFavoriteIcons;
     private static int actualUnselectedFavoriteIcons;
 
-    @Before
-    public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        //TODO add logic to change browser based on user preference
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        homePage = new TwitterHomePage(driver);
-    }
-
-    @After
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
 
     private static int getInitialUnselectedFavoriteIcons() {
         return initialUnselectedFavoriteIcons;
@@ -61,14 +37,6 @@ public class HomePageSteps {
 
     public static void setActualUnselectedFavoriteIcons(int actualValue) {
         actualUnselectedFavoriteIcons = actualValue;
-    }
-
-    private static String getTweetTextThatWillBeDeleted() {
-        return tweetTextThatWillBeDeleted;
-    }
-
-    private static void setTweetTextThatWillBeDeleted(String tweetTextThatWillBeDeleted) {
-        HomePageSteps.tweetTextThatWillBeDeleted = tweetTextThatWillBeDeleted;
     }
 
     private static String getUniqueTweetMessage() {
@@ -87,15 +55,15 @@ public class HomePageSteps {
     @When("^the user is \"(logged in|logged out)\"$")
     public void theUserIs(String loginStatus) {
         if ("logged out".equals(loginStatus)) {
-            assertFalse(homePage.isUserLoggedIn());
-        } else {
             assertTrue(homePage.isUserLoggedIn());
+        } else {
+            assertFalse(homePage.isUserLoggedIn());
         }
     }
 
     @Then("^the login page should appear with the expected sign in / login components$")
     public void theLoginPageShouldAppearWithTheExpectedSignInLoginComponents() {
-        assertTrue(homePage.isLoginFormDisplayed());
+        assertTrue(homePage.isLoginButtonDisplayed());
         assertTrue(homePage.isSignUpButtonDisplayed());
     }
 
@@ -110,45 +78,40 @@ public class HomePageSteps {
 
     @Then("^he should see all the home page components$")
     public void heShouldSeeAllTheHomePageComponents() {
-        assertTrue(homePage.isTopBarDisplayed());
-        assertTrue(homePage.isTopNavTweetButtonDisplayed());
-        assertTrue(homePage.isLeftDashboardDisplayed());
-        assertTrue(homePage.isRightDashboardDisplayed());
+        assertTrue(homePage.isSideNavTweetButtonDisplayed());
+        assertTrue(homePage.isSearchBoxDisplayed());
+        assertTrue(homePage.isRightSideBarDisplayed());
         assertTrue(homePage.isTweetsContainerDisplayed());
     }
 
     @Then("^the posted tweet should be displayed and should contain the above message$")
     public void thePostedTweetShouldBeDisplayedAndShouldContainMessage() {
-        assertEquals(uniqueTweetMessage, homePage.getTweetTextFromPosition(1));
+        assertEquals(homePage.getTweetTextFromPosition(1), uniqueTweetMessage);
 
     }
 
-    //TODO break this into two steps
-    @And("^we wait until the new tweet bar is displayed and we click on it to update the tweet message list$")
-    public void weWaitUntilTheNewTweetBarIsDisplayedAndWeClickOnItToUpdateTheTweetMessageList() {
-        homePage.clickOnNewTweetBar();
-    }
 
     @And("^then the user decides to delete (1|2|3)(?:st|nd|rd) tweet$")
     public void thenTheUserDecidesToDeleteLastTweet(int tweetPosition) {
-        setTweetTextThatWillBeDeleted(homePage.getTweetTextFromPosition(1));
+        homePage.setTweetTextThatWillBeDeleted(homePage.getTweetTextFromPosition(1));
         homePage.deleteTweetFromUI(tweetPosition);
 
     }
 
     @Then("^the tweet from the (1|2|3)(?:st|nd|rd) position should no longer be displayed$")
     public void theTweetShouldNoLongerBeDisplayed(int tweetPosition) {
-        assertNotEquals(getTweetTextThatWillBeDeleted(), homePage.getTweetTextFromPosition(tweetPosition));
+        assertNotEquals(homePage.getTweetTextThatWillBeDeleted(), homePage.getTweetTextFromPosition(tweetPosition));
     }
 
     @And("^the user is replying to the (1|2|3)(?:st|nd|rd) tweet with the following text \"([^\"]*)\"$")
     public void theUserIsReplyingToTheTweetWithTheFollowingText(int tweetPosition, String tweetReply) {
-        homePage.replyToTweet(tweetPosition, tweetReply);
+        uniqueTweetReplyMessage = tweetReply + " [ " + UUID.randomUUID() + " ]";
+        homePage.replyToTweet(tweetPosition, uniqueTweetReplyMessage);
     }
 
-    @Then("^the (1|2|3)(?:st|nd|rd) tweet should contain the \"([^\"]*)\" message as a reply$")
-    public void theTweetShouldContainTheMessageAsAReply(int tweetPosition, String tweetReply) {
-        assertEquals(homePage.getTweetTextFromPosition(tweetPosition + 1), tweetReply);
+    @Then("^the (1|2|3)(?:st|nd|rd) tweet should contain the Replying to a tweet message as a reply$")
+    public void theTweetShouldContainTheMessageAsAReply(int tweetPosition) {
+        assertEquals(homePage.getTweetTextFromPosition(tweetPosition), uniqueTweetReplyMessage);
     }
 
     @When("^the user adds the (1|2|3)(?:st|nd|rd) tweet as a favorite$")
@@ -173,26 +136,14 @@ public class HomePageSteps {
 
     @Then("^he should be redirected to the \"([^\"]*)\" page$")
     public void heShouldBeRedirectedToThePage(String urlName) {
-        waitForURL(getDriver(), urlName, 2);
+        waitForURL(urlName, 10);
         assertTrue(homePage.isNavigationTabSelected(urlName));
     }
 
-    @And("^when the user clicks on the emoji menu$")
-    public void whenTheUserClicksOnTheEmojiMenu() {
-        homePage.clickOnEmojiMenu();
-    }
-
-    // TODO break this into two steps
-    @Then("^the emoji content is displayed and after clicking on it it's no longer displayed$")
-    public void theEmojiContentIsDisplayedAndAfterClickingOnItItSNoLongerDisplayed() {
-        assertTrue(homePage.isEmojiContentDisplayed());
-        homePage.clickOnEmojiMenu();
-        assertFalse(homePage.isEmojiContentDisplayed());
-    }
 
     @And("^open the top nav tweet modal$")
     public void openComposeTweetModalFromNavBar() {
-        homePage.clickOnTopNavTweetButton();
+        homePage.clickOnSideNavTweetButton();
     }
 
     @And("^enters the following text \"([^\"]*)\"$")

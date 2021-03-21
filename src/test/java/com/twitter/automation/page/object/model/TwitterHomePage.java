@@ -2,189 +2,189 @@ package com.twitter.automation.page.object.model;
 
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.twitter.automation.stepdefs.HomePageSteps.setActualUnselectedFavoriteIcons;
-import static com.twitter.automation.stepdefs.HomePageSteps.setInitialUnselectedFavoriteIcons;
+import static com.twitter.automation.step.definitions.CucumberHooks.getDriver;
+import static com.twitter.automation.step.definitions.HomePageSteps.setActualUnselectedFavoriteIcons;
+import static com.twitter.automation.step.definitions.HomePageSteps.setInitialUnselectedFavoriteIcons;
 import static com.twitter.automation.utils.CommonUtils.*;
 
 
 public class TwitterHomePage {
 
-
-    private final By LOGGED_IN = By.cssSelector("body.logged-in");
-    private final By SIGN_UP_BUTTON = By.cssSelector(".StaticLoggedOutHomePage-buttonSignup");
-    private final By LOGIN_FORM = By.cssSelector(".LoginForm");
-    private final By SIGN_IN_EMAIL = By.cssSelector(".StaticLoggedOutHomePage-login .js-signin-email");
-    private final By SIGN_IN_PASSWORD = By.cssSelector(".StaticLoggedOutHomePage-login .LoginForm-password .text-input");
-    private final By LOG_IN_BUTTON = By.cssSelector(".StaticLoggedOutHomePage-login .js-submit");
-    private final By USER_SETTINGS_BUTTON = By.cssSelector("#user-dropdown .settings");
-    private final By USER_SIGN_OUT_BUTTON = By.cssSelector(".dropdown-menu #signout-button");
-    private final By TOP_BAR_COMPONENT = By.cssSelector(".topbar.js-topbar");
-    private final By LEFT_DASHBOARD = By.cssSelector("#page-container .dashboard-left");
-    private final By RIGHT_DASHBOARD = By.cssSelector("#page-container .dashboard-right");
-    private final By TWEETS_CONTAINER = By.cssSelector(".top-timeline-tweetbox");
-    private final By TOP_NAV_TWEET_BUTTON = By.cssSelector(".global-nav-inner #global-new-tweet-button");
-    private final By TWEET_COMPOSE_MODAL = By.cssSelector(".modal .TweetstormDialog-content");
-    private final By TWEET_BOX_CONTENT = By.cssSelector("#Tweetstorm-tweet-box-0 .RichEditor-scrollContainer .tweet-box.rich-editor");
-    private final By TWEET_BOX = By.cssSelector("#Tweetstorm-tweet-box-0  div.tweet-box.rich-editor > div");
-    private final By SEND_TWEET_BUTTON = By.cssSelector("#Tweetstorm-tweet-box-0 .js-send-tweets");
-    private final By TWEET_ALERT_MESSAGE = By.cssSelector(".js-message-drawer-visible");
-    private final By NEW_TWEET_BAR = By.cssSelector(".js-new-tweets-bar");
-    private final By TWEET_CARET_BUTTON = By.cssSelector(".content .js-tooltip .Icon--small");
-    private final By DELETE_TWEET_BUTTON_FROM_DROPDOWN = By.cssSelector(".my-tweet.dismissible-content.focus .js-actionDelete");
-    private final By DELETE_TWEET_MODAL = By.cssSelector("#delete-tweet-dialog-dialog > div.modal-content");
-    private final By DELETE_TWEET_BUTTON_FROM_MODAL = By.cssSelector("#delete-tweet-dialog-dialog .delete-action");
-    private final By TWEET_REPLY_ICON = By.cssSelector(".ProfileTweet-action--reply .Icon--reply");
-    private final By TWEET_REPLY_MODAL = By.cssSelector("#global-tweet-dialog-dialog > div.modal-content");
-    private final By TWEET_REPLY_BOX = By.cssSelector("#tweet-box-global");
-    private final By TWEET_REPLY_BUTTON = By.cssSelector("#global-tweet-dialog-dialog .tweet-button > button");
-    private final By UNSELECTED_FAVORITE_ICON = By.cssSelector("div[class*='my-tweet']:not([class*='favorited']) [title='Like']");
-    private final By SELECTED_FAVORITE_ICONS = By.cssSelector(".my-tweet.favorited [data-original-title='Undo like']");
-    private final By HOME_NAVIGATION_TAB = By.cssSelector(".js-global-actions .home");
-    private final By MOMENTS_NAVIGATION_TAB = By.cssSelector(".js-global-actions .moments");
-    private final By NOTIFICATIONS_NAVIGATION_TAB = By.cssSelector(".js-global-actions .notifications");
-    private final By MESSAGES_NAVIGATION_TAB = By.cssSelector(".js-global-actions .dm-nav");
-    private final By EMOJI_ICON = By.cssSelector("#Tweetstorm-tweet-box-0 .Icon.Icon--smiley");
-    private final By EMOJI_CONTENT = By.cssSelector("#Tweetstorm-tweet-box-0 .EmojiPicker-content");
-    private final By USER_TARGET_LINK = By.cssSelector(".account-group .u-linkComplex-target");
-    private final By USER_TIMELINE_RIGHT_SIDEBAR = By.cssSelector(".SidebarCommonModules");
+    private final By SIGN_UP_BUTTON = By.cssSelector("[data-testid='signupButton']");
+    private final By LOGIN_BUTTON = By.cssSelector("[data-testid='loginButton']");
+    private final By SIGN_IN_EMAIL = By.cssSelector("label [name='session[username_or_email]']");
+    private final By SIGN_IN_PASSWORD = By.cssSelector("label [name='session[password]']");
+    private final By LOGIN_FORM_BUTTON = By.cssSelector("main [data-testid='LoginForm_Login_Button']");
+    private final By SIDE_NAV_ACCOUNT_SWITCHER = By.cssSelector("[data-testid='SideNav_AccountSwitcher_Button']");
+    private final By LOGOUT_BUTTON = By.cssSelector("[data-testid='AccountSwitcher_Logout_Button']");
+    private final By LOGOUT_CONFIRMATION_BUTTON = By.cssSelector("[data-testid='confirmationSheetConfirm']");
+    private final By RIGHT_SIDEBAR = By.cssSelector("[data-testid='sidebarColumn']");
+    private final By SEARCH_BOX_INPUT = By.cssSelector("[data-testid='SearchBox_Search_Input']");
+    private final By SIDE_NAV_TWEET_BUTTON = By.cssSelector("[data-testid='SideNav_NewTweet_Button']");
+    private final By TWEET_COMPOSE_MODAL = By.cssSelector("[aria-labelledby='modal-header']");
+    private final By TWEET_BOX_CONTENT = By.cssSelector("[aria-labelledby='modal-header'] [data-testid='tweetTextarea_0']");
+    private final By SEND_TWEET_BUTTON = By.cssSelector("[data-testid='tweetButton']");
+    private final By TWEET_ALERT_MESSAGE = By.cssSelector("[data-testid='toast']");
+    private final By TWEET_CARET_BUTTON = By.cssSelector("[data-testid='primaryColumn'] [data-testid='caret']");
+    private final By DELETE_TWEET_BUTTON_FROM_MODAL = By.cssSelector("[data-testid='confirmationSheetConfirm']");
+    private final By TWEET_REPLY_ICON = By.cssSelector("[data-testid='reply']");
+    private final By UNSELECTED_FAVORITE_ICON = By.cssSelector("[data-testid='like']");
+    private final By SELECTED_FAVORITE_ICONS = By.cssSelector("[data-testid='unlike']");
+    private final By HOME_NAVIGATION_TAB = By.cssSelector("[data-testid='AppTabBar_Home_Link']");
+    private final By EXPLORE_NAVIGATION_TAB = By.cssSelector("[data-testid='AppTabBar_Explore_Link']");
+    private final By NOTIFICATIONS_NAVIGATION_TAB = By.cssSelector("[data-testid='AppTabBar_Notifications_Link']");
+    private final By MESSAGES_NAVIGATION_TAB = By.cssSelector("[data-testid='AppTabBar_DirectMessage_Link']");
+    private final By USER_PROFILE_BUTTON = By.cssSelector("[aria-label='Profile']");
+    private final By LIST_OF_TWEETS = By.cssSelector("[data-testid='tweet'] [lang]");
+    private final By USER_TWEETS_COLUMN = By.cssSelector("[data-testid='primaryColumn']");
+    private final By ACTIVE_TAB = By.cssSelector(".r-13gxpu9");
+    private final By TWEET_MENU_CONTAINER = By.cssSelector("[role='menu']");
+    private final By TIMELINE_LOADING = By.cssSelector("[aria-label='Loading timeline'][role=progressbar]");
+    private final By HOME_TIMELINE_LOADER = By.cssSelector("[aria-label='Timeline: Your Home Timeline'] [role=progressbar]");
+    private final By RECOMMENDATION_LOADER = By.cssSelector("[aria-label='Loading recommendations for users to follow'][role=progressbar]");
+    private final By LOADING_PAGE = By.cssSelector(".r-k200y");
 
     private final String BASE_URL = loadPropertiesFile().getProperty("twitter.url");
     private final String USERNAME = loadPropertiesFile().getProperty("username");
     private final String PASSWORD = loadPropertiesFile().getProperty("password");
 
+    private String tweetTextThatWillBeDeleted;
+
+
     private final Logger LOGGER = LoggerFactory.getLogger(TwitterHomePage.class);
-    private WebDriver driver;
 
-    public TwitterHomePage(WebDriver driver) {
-        this.driver = driver;
-
-    }
 
     public void navigateToTwitterHomePage() {
-        driver.get(BASE_URL);
+        getDriver().get(BASE_URL);
+        removeWelcomeCookie();
+        waitForElement(LOADING_PAGE, 10);
     }
 
     public void navigateToUserTimeline() {
-        driver.findElement(USER_TARGET_LINK).click();
-        waitForElement(driver, USER_TIMELINE_RIGHT_SIDEBAR, 10);
+        getDriver().findElement(USER_PROFILE_BUTTON).click();
+        waitForElement(USER_TWEETS_COLUMN, 10);
     }
 
     public boolean isUserLoggedIn() {
-        return isElementPresent(driver, LOGGED_IN);
+        return isElementDisplayed(SIGN_UP_BUTTON);
     }
 
-    public boolean isTopBarDisplayed() {
-        return driver.findElement(TOP_BAR_COMPONENT).isDisplayed();
+
+    public boolean isSearchBoxDisplayed() {
+        return getDriver().findElement(SEARCH_BOX_INPUT).isDisplayed();
     }
 
-    public boolean isLeftDashboardDisplayed() {
-        return driver.findElement(LEFT_DASHBOARD).isDisplayed();
-    }
-
-    public boolean isRightDashboardDisplayed() {
-        return driver.findElement(RIGHT_DASHBOARD).isDisplayed();
+    public boolean isRightSideBarDisplayed() {
+        return getDriver().findElement(RIGHT_SIDEBAR).isDisplayed();
     }
 
     public boolean isTweetsContainerDisplayed() {
-        return driver.findElement(TWEETS_CONTAINER).isDisplayed();
+        return getDriver().findElement(USER_TWEETS_COLUMN).isDisplayed();
     }
 
-    public boolean isTopNavTweetButtonDisplayed() {
-        return driver.findElement(TOP_NAV_TWEET_BUTTON).isDisplayed();
+    public boolean isSideNavTweetButtonDisplayed() {
+        return getDriver().findElement(SIDE_NAV_TWEET_BUTTON).isDisplayed();
     }
 
     public boolean isSignUpButtonDisplayed() {
-        return driver.findElement(SIGN_UP_BUTTON).isDisplayed();
+        return getDriver().findElement(SIGN_UP_BUTTON).isDisplayed();
     }
 
-    public boolean isLoginFormDisplayed() {
-        return driver.findElement(LOGIN_FORM).isDisplayed();
+    public boolean isLoginButtonDisplayed() {
+        return getDriver().findElement(LOGIN_BUTTON).isDisplayed();
     }
 
-    public void clickOnTopNavTweetButton() {
-        driver.findElement(TOP_NAV_TWEET_BUTTON).click();
+    public void clickOnSideNavTweetButton() {
+        getDriver().findElement(SIDE_NAV_TWEET_BUTTON).click();
     }
 
+    public void clickOnSelectedTweetMenuItem(String menuItemName) {
+        waitForElement(TWEET_MENU_CONTAINER, 2);
+        getDriver().findElement(By.xpath("//span[contains(text(),'" + menuItemName + "')]")).click();
+
+    }
 
     public void login() {
-        driver.findElement(SIGN_IN_EMAIL).sendKeys(USERNAME);
-        driver.findElement(SIGN_IN_PASSWORD).sendKeys(PASSWORD);
-        driver.findElement(LOG_IN_BUTTON).click();
+        getDriver().findElement(LOGIN_BUTTON).click();
+        waitForElement(SIGN_IN_EMAIL, 10);
+        getDriver().findElement(SIGN_IN_EMAIL).sendKeys(USERNAME);
+        getDriver().findElement(SIGN_IN_PASSWORD).sendKeys(PASSWORD);
+        getDriver().findElement(LOGIN_FORM_BUTTON).click();
+        waitForElement(USER_TWEETS_COLUMN, 30);
+        waitForUrlContains("home", 10);
+        waitForHomePageToFinishLoading();
     }
 
     public void logout() {
-        driver.findElement(USER_SETTINGS_BUTTON).click();
-        driver.findElement(USER_SIGN_OUT_BUTTON).click();
-        waitForUrlToContain(driver, "logout", 2);
-
+        getDriver().findElement(SIDE_NAV_ACCOUNT_SWITCHER).click();
+        waitForElement(LOGOUT_BUTTON, 5);
+        getDriver().findElement(LOGOUT_BUTTON).click();
+        waitForElement(LOGOUT_CONFIRMATION_BUTTON, 3);
+        getDriver().findElement(LOGOUT_CONFIRMATION_BUTTON).click();
+        waitForElement(SIGN_UP_BUTTON, 10);
     }
 
     public String getTweetTextFromPosition(int positionNumber) {
-        return driver.findElements(By.cssSelector(".stream-items .tweet-text")).get(positionNumber - 1).getText();
+        return getDriver().findElements(LIST_OF_TWEETS).get(positionNumber - 1).getText();
     }
-
 
     private void enterTextIntoElement(By locator, String tweetMessage) {
         for (int index = 0; index < tweetMessage.length(); index++) {
             char character = tweetMessage.charAt(index);
-            driver.findElement(locator).sendKeys(String.valueOf(character));
+            getDriver().findElement(locator).sendKeys(String.valueOf(character));
         }
     }
 
-    public void clickOnNewTweetBar() {
-        waitForElement(driver, NEW_TWEET_BAR, 60);
-        driver.findElement(NEW_TWEET_BAR).click();
-    }
 
     public void deleteTweetFromUI(int tweetPosition) {
-        driver.findElements(TWEET_CARET_BUTTON).get(tweetPosition - 1).click();
-        driver.findElement(DELETE_TWEET_BUTTON_FROM_DROPDOWN).click();
-        waitForElement(driver, DELETE_TWEET_MODAL, 3);
-        driver.findElement(DELETE_TWEET_BUTTON_FROM_MODAL).click();
-        waitForElement(driver, TWEET_ALERT_MESSAGE, 5);
-        waitForElementToDisappear(driver, TWEET_ALERT_MESSAGE, 10);
+        getDriver().findElements(TWEET_CARET_BUTTON).get(tweetPosition - 1).click();
+        clickOnSelectedTweetMenuItem("Delete");
+        waitForElement(DELETE_TWEET_BUTTON_FROM_MODAL, 3);
+        getDriver().findElement(DELETE_TWEET_BUTTON_FROM_MODAL).click();
+        waitForElement(TWEET_ALERT_MESSAGE, 10);
+        waitForElementToDisappear(TWEET_ALERT_MESSAGE, 10);
     }
 
     public void replyToTweet(int tweetPosition, String tweetReply) {
-        driver.findElements(TWEET_REPLY_ICON).get(tweetPosition - 1).click();
-        waitForElement(driver, TWEET_REPLY_MODAL, 2);
-        enterTextIntoElement(TWEET_REPLY_BOX, tweetReply);
+        waitForElement(TWEET_REPLY_ICON, 10);
+        getDriver().findElements(TWEET_REPLY_ICON).get(tweetPosition - 1).click();
+        waitForElement(TWEET_COMPOSE_MODAL, 2);
+        enterTextIntoElement(TWEET_BOX_CONTENT, tweetReply);
         LOGGER.info("replying with message: [{}]", tweetReply);
-        waitForTextToBePresentInElement(driver, 2, TWEET_REPLY_BOX, tweetReply);
-        driver.findElement(TWEET_REPLY_BUTTON).click();
-        waitForElement(driver, TWEET_ALERT_MESSAGE, 2);
-        waitForElementToDisappear(driver, TWEET_ALERT_MESSAGE, 5);
+        waitForTextToBePresentInElement(2, TWEET_BOX_CONTENT, tweetReply);
     }
 
     public void addTweetToFavorite(int tweetPosition) {
-        setInitialUnselectedFavoriteIcons(driver.findElements(UNSELECTED_FAVORITE_ICON).size());
-        driver.findElements(UNSELECTED_FAVORITE_ICON).get(tweetPosition - 1).click();
-        waitForElement(driver, SELECTED_FAVORITE_ICONS, 3);
-        setActualUnselectedFavoriteIcons(driver.findElements(UNSELECTED_FAVORITE_ICON).size());
+        waitForHomePageToFinishLoading();
+        setInitialUnselectedFavoriteIcons(getDriver().findElements(UNSELECTED_FAVORITE_ICON).size());
+        int initialNumberOfSelectedFavoriteIcons = getDriver().findElements(SELECTED_FAVORITE_ICONS).size();
+        getDriver().findElements(UNSELECTED_FAVORITE_ICON).get(tweetPosition - 1).click();
+        waitForNumberOfElements(SELECTED_FAVORITE_ICONS, 5, initialNumberOfSelectedFavoriteIcons + 1);
+        setActualUnselectedFavoriteIcons(getDriver().findElements(UNSELECTED_FAVORITE_ICON).size());
     }
 
     public boolean isFavoriteTweet(int tweetPosition) {
-        return driver.findElements(SELECTED_FAVORITE_ICONS).get(tweetPosition - 1).isDisplayed();
+        return getDriver().findElements(SELECTED_FAVORITE_ICONS).get(tweetPosition - 1).isDisplayed();
     }
 
 
     public void clickOnSelectedNavigationButton(String navigationTabName) {
         switch (navigationTabName.toLowerCase()) {
             case "home":
-                driver.findElement(HOME_NAVIGATION_TAB).click();
+                getDriver().findElement(HOME_NAVIGATION_TAB).click();
                 break;
-            case "moments":
-                driver.findElement(MOMENTS_NAVIGATION_TAB).click();
+            case "explore":
+                getDriver().findElement(EXPLORE_NAVIGATION_TAB).click();
                 break;
             case "notifications":
-                driver.findElement(NOTIFICATIONS_NAVIGATION_TAB).click();
+                getDriver().findElement(NOTIFICATIONS_NAVIGATION_TAB).click();
                 break;
             case "messages":
-                driver.findElement(MESSAGES_NAVIGATION_TAB).click();
+                getDriver().findElement(MESSAGES_NAVIGATION_TAB).click();
                 break;
             default:
         }
@@ -194,39 +194,54 @@ public class TwitterHomePage {
         boolean isTabSelected = false;
         switch (navigationTabName.toLowerCase()) {
             case "home":
-                isTabSelected = driver.findElement(HOME_NAVIGATION_TAB).getAttribute("class").contains("active");
+                isTabSelected = getDriver().findElement(HOME_NAVIGATION_TAB).findElement(ACTIVE_TAB).isDisplayed();
                 break;
-            case "moments":
-                isTabSelected = driver.findElement(MOMENTS_NAVIGATION_TAB).getAttribute("class").contains("active");
+            case "explore":
+                isTabSelected = getDriver().findElement(EXPLORE_NAVIGATION_TAB).findElement(ACTIVE_TAB).isDisplayed();
                 break;
             case "notifications":
-                isTabSelected = driver.findElement(NOTIFICATIONS_NAVIGATION_TAB).getAttribute("class").contains("active");
+                isTabSelected = getDriver().findElement(NOTIFICATIONS_NAVIGATION_TAB).findElement(ACTIVE_TAB).isDisplayed();
                 break;
             case "messages":
-                isTabSelected = driver.findElement(MESSAGES_NAVIGATION_TAB).getAttribute("class").contains("active");
+                isTabSelected = getDriver().findElement(MESSAGES_NAVIGATION_TAB).findElement(ACTIVE_TAB).isDisplayed();
                 break;
         }
         return isTabSelected;
     }
 
-    public void clickOnEmojiMenu() {
-        driver.findElement(EMOJI_ICON).click();
-    }
-
-    public boolean isEmojiContentDisplayed() {
-        return driver.findElement(EMOJI_CONTENT).isDisplayed();
-    }
-
     public void enterTweetMessageIntoModal(String tweetMessage) {
-        waitForElement(driver, TWEET_COMPOSE_MODAL, 3);
+        waitForElement(TWEET_COMPOSE_MODAL, 3);
         enterTextIntoElement(TWEET_BOX_CONTENT, tweetMessage);
-        waitForTextToBePresentInElement(driver, 3, TWEET_BOX, tweetMessage);
+        waitForTextToBePresentInElement(3, TWEET_BOX_CONTENT, tweetMessage);
     }
 
     public void clickAndWaitForTweetToAppear() {
-        driver.findElement(SEND_TWEET_BUTTON).click();
-        waitForElement(driver, TWEET_ALERT_MESSAGE, 15);
-        waitForElementToDisappear(driver, TWEET_ALERT_MESSAGE, 15);
+        getDriver().findElement(SEND_TWEET_BUTTON).click();
+        waitForElementToDisappear(TWEET_COMPOSE_MODAL, 3);
+        waitForElement(TWEET_ALERT_MESSAGE, 3);
+        waitForElementToDisappear(TWEET_ALERT_MESSAGE, 10);
+
     }
 
+    public void removeWelcomeCookie() {
+        Cookie ck = new Cookie("eu_cn", "1");
+        getDriver().manage().addCookie(ck);
+    }
+
+    public void setTweetTextThatWillBeDeleted(String tweetThatWillBeDeleted) {
+        waitForElement(TWEET_CARET_BUTTON, 10);
+        tweetTextThatWillBeDeleted = tweetThatWillBeDeleted;
+    }
+
+    public String getTweetTextThatWillBeDeleted() {
+        return tweetTextThatWillBeDeleted;
+    }
+
+    public void waitForHomePageToFinishLoading() {
+        waitForElementToDisappear(TIMELINE_LOADING, 10);
+        waitForElementToDisappear(HOME_TIMELINE_LOADER, 10);
+        waitForElementToDisappear(RECOMMENDATION_LOADER, 10);
+        waitForElement(LIST_OF_TWEETS, 2);
+        waitForElement(UNSELECTED_FAVORITE_ICON, 2);
+    }
 }
